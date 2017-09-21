@@ -1,8 +1,7 @@
-package de.factfinder.export.markdown;
+package de.factfinder.export.io.markdown;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -12,7 +11,7 @@ public class MarkdownParser {
 		//Util
 	}
 
-	public static String readAllCodeBlocks(File markdownFile) {
+	private static String readAllCodeBlocks(File markdownFile) {
 		StringBuilder code = new StringBuilder();
 		try (BufferedReader br = new BufferedReader(new FileReader(markdownFile))) {
 			String line;
@@ -33,7 +32,7 @@ public class MarkdownParser {
 		return code.toString();
 	}
 
-	public static String readAllHeadings(File markdownFile) {
+	private static String readAllHeadings(File markdownFile) {
 		StringBuilder headings = new StringBuilder();
 		try (BufferedReader br = new BufferedReader(new FileReader(markdownFile))) {
 			String line;
@@ -49,7 +48,7 @@ public class MarkdownParser {
 		return headings.toString();
 	}
 
-	public static String readRegularText(File markdownFile) {
+	private static String readRegularText(File markdownFile) {
 		StringBuilder regularText = new StringBuilder();
 		try (BufferedReader br = new BufferedReader(new FileReader(markdownFile))) {
 			String line;
@@ -66,6 +65,10 @@ public class MarkdownParser {
 			e.printStackTrace();
 		}
 		return regularText.toString();
+	}
+
+	public static String parse(File markdownFile, final String baseUrl) {
+		return readAllCodeBlocks(markdownFile) + ";" + readAllHeadings(markdownFile) + ";" + readRegularText(markdownFile) + ";";
 	}
 
 }

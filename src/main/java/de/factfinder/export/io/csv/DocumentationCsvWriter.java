@@ -1,4 +1,4 @@
-package de.factfinder.export.csv;
+package de.factfinder.export.io.csv;
 
 import java.io.IOException;
 
