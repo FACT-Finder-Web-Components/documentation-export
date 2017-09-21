@@ -1,20 +1,18 @@
 package de.factfinder.export;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.List;
+import java.io.IOException;
 
-import de.factfinder.export.io.FileWalker;
+import de.factfinder.export.markdown.MarkdownParser;
 
 public class ExportMain {
 
-	public static void main(String[] args) throws FileNotFoundException {
-		List<File> files = FileWalker.readMarkdownFilesRecursively(args[0]);
-		File file = files.get(0);
-		FileReader fr = new FileReader(file);
-		BufferedReader br = new BufferedReader(fr);
-		br.lines().forEach(System.out::println);
+	public static void main(String[] args) throws IOException {
+
+		File file = new File("/home/sdamrath/code/documentation/markdown/en/ff-compare.md");
+		String codeBlocks = MarkdownParser.readAllCodeBlocks(file);
+		String headings = MarkdownParser.readAllHeadings(file);
+		System.out.println(codeBlocks);
+		System.out.println(headings);
 	}
 }
