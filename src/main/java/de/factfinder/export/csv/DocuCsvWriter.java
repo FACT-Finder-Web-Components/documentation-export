@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public class DocuCsvWriter extends FactFinderExportWriter {
 
-	private final String COLUMNS = "col1;col2;col3\n";
+	private final String COLUMNS = "code;headings;regular;deeplink\n";
 
 	public DocuCsvWriter(final String outputDir) throws IOException {
 		super(outputDir);
