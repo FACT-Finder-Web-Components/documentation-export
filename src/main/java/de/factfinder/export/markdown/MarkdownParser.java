@@ -49,4 +49,23 @@ public class MarkdownParser {
 		return headings.toString();
 	}
 
+	public static String readRegularText(File markdownFile) {
+		StringBuilder regularText = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(markdownFile))) {
+			String line;
+			boolean isInCodeBlock = false;
+			while ((line = br.readLine()) != null) {
+				if (line.contains("```")) {
+					isInCodeBlock = !isInCodeBlock;
+					continue;
+				}
+				if (!line.startsWith("#") && !isInCodeBlock && !(line.length() <= 1)) regularText.append(line.trim().concat(" \n"));
+			}
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return regularText.toString();
+	}
+
 }
