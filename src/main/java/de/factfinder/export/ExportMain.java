@@ -3,7 +3,7 @@ package de.factfinder.export;
 import java.io.File;
 import java.io.IOException;
 
-import de.factfinder.export.csv.DocuCsvWriter;
+import de.factfinder.export.csv.DocumentationCsvWriter;
 import de.factfinder.export.markdown.MarkdownParser;
 
 public class ExportMain {
@@ -16,8 +16,8 @@ public class ExportMain {
 		String headings = MarkdownParser.readAllHeadings(file);
 		String regularText = MarkdownParser.readRegularText(file);
 
-		DocuCsvWriter csvWriter = new DocuCsvWriter(args[1]);
-		final String csvContent = codeBlocks + ";;;" + url + "\n" + ";" + headings + ";;" + url + "\n" + ";;" + regularText + ";" + url + "\n";
+		DocumentationCsvWriter csvWriter = new DocumentationCsvWriter(args[1]);
+		final String csvContent = "\"" + codeBlocks +"\";\"" + headings + "\";\"" + regularText + "\";\"" + url;
 		csvWriter.write(csvContent);
 		csvWriter.closeFile();
 	}

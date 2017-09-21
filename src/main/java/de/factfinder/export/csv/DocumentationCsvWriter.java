@@ -2,11 +2,11 @@ package de.factfinder.export.csv;
 
 import java.io.IOException;
 
-public class DocuCsvWriter extends FactFinderExportWriter {
+public class DocumentationCsvWriter extends FactFinderExportWriter {
 
 	private final String COLUMNS = "code;headings;regular;deeplink\n";
 
-	public DocuCsvWriter(final String outputDir) throws IOException {
+	public DocumentationCsvWriter(final String outputDir) throws IOException {
 		super(outputDir);
 	}
 
