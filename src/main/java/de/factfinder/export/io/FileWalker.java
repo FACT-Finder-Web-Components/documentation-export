@@ -31,4 +31,12 @@ public final class FileWalker {
 		}
 		return markdownFiles;
 	}
+
+	public static List<File> readOnlyApiFiles(String baseDir) {
+		return readMarkdownFilesRecursively(baseDir).stream().filter(f -> f.getName().contains("api")).collect(Collectors.toList());
+	}
+
+	public static List<File> readOnlyDocumentationFiles(String baseDir) {
+		return readMarkdownFilesRecursively(baseDir).stream().filter(f -> !f.getName().contains("api")).collect(Collectors.toList());
+	}
 }
