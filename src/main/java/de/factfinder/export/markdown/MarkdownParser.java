@@ -59,7 +59,7 @@ public class MarkdownParser {
 					isInCodeBlock = !isInCodeBlock;
 					continue;
 				}
-				if (!line.startsWith("#") && !isInCodeBlock && !(line.length() <= 1)) regularText.append(line.trim().concat(" \n"));
+				if (!line.startsWith("#") && !isInCodeBlock && !(line.length() <= 1)) regularText.append(line.trim().concat(" "));
 			}
 			br.close();
 		} catch (IOException e) {
