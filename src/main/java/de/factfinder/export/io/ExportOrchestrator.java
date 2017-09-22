@@ -11,7 +11,7 @@ public final class ExportOrchestrator {
 
 	public static void runExport(String inputBaseDir, String outputBaseDir, final String baseUrl) throws IOException {
 
-//		List<File> apiFiles = FileWalker.readOnlyApiFiles(inputBaseDir);
+		//		List<File> apiFiles = FileWalker.readOnlyApiFiles(inputBaseDir);
 		List<File> docuFiles = FileWalker.readOnlyDocumentationFiles(inputBaseDir);
 
 		StringBuilder documentationCsvContent = new StringBuilder();

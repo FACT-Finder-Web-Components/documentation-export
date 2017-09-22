@@ -69,7 +69,7 @@ public class MarkdownParser {
 
 	public static String parse(File markdownFile, final String baseUrl) {
 		return readAllCodeBlocks(markdownFile) + ";" + readAllHeadings(markdownFile) + ";" + readRegularText(markdownFile) + ";" + baseUrl + "/"
-							+ markdownFile.getName();
+							+ markdownFile.getName().replace(".md", "\n");
 	}
 
 }
