@@ -9,8 +9,8 @@ import de.factfinder.export.io.ExportOrchestrator;
 public class ExportMain {
 
 	public static void main(String[] args) throws IOException {
-		if (args.length == 2) {
-			ExportOrchestrator.runExport(args[0], args[1], args[0]);
+		if (args.length == 3) {
+			ExportOrchestrator.runExport(args[0], args[1], args[2]);
 		} else {
 			String inputBaseDir;
 			String outputBaseDir;
