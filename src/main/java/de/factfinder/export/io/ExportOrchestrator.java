@@ -4,21 +4,35 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import de.factfinder.export.io.csv.DocumentationCsvWriter;
+import de.factfinder.export.io.csv.FactFinderExportWriter;
 import de.factfinder.export.io.markdown.MarkdownParser;
 
 public final class ExportOrchestrator {
 
+	private static String getLanguage(File directory) {
+		return directory.getParent();
+	}
+
 	public static void runExport(String inputBaseDir, String outputBaseDir, final String baseUrl) throws IOException {
 
-		//		List<File> apiFiles = FileWalker.readOnlyApiFiles(inputBaseDir);
-		List<File> docuFiles = FileWalker.readOnlyDocumentationFiles(inputBaseDir);
+		final File inputDir = new File(inputBaseDir);
 
-		StringBuilder documentationCsvContent = new StringBuilder();
-		docuFiles.stream().map(file -> MarkdownParser.parse(file, baseUrl)).forEach(documentationCsvContent::append);
+		String documentationFilename = "documentation-".concat(getLanguage(inputDir)).concat(".csv");
+		String apiFilename = "api-".concat(getLanguage(inputDir)).concat(".csv");
 
-		DocumentationCsvWriter csvWriter = new DocumentationCsvWriter(outputBaseDir + "documentation-en.csv");
+		List<File> apiFiles = FileWalker.readOnlyApiFiles(inputDir);
+		List<File> docuFiles = FileWalker.readOnlyDocumentationFiles(inputDir);
+
+		StringBuilder documentationCsvContent = new StringBuilder("id;title;code;description;headings;deeplink");
+		docuFiles.stream().map(file -> MarkdownParser.parseDocumentation(file, baseUrl)).forEach(documentationCsvContent::append);
+
+		StringBuilder apiCsvContent = new StringBuilder("id;title;property;mixins;methods;events;deeplink");
+		apiFiles.stream().map(file -> MarkdownParser.parseDocumentation(file, baseUrl)).forEach(apiCsvContent::append);
+
+		FactFinderExportWriter csvWriter = new FactFinderExportWriter(outputBaseDir + documentationFilename);
 		csvWriter.write(documentationCsvContent.toString()).closeFile();
+		csvWriter = new FactFinderExportWriter(outputBaseDir + apiFilename);
+		csvWriter.write(apiCsvContent.toString()).closeFile();
 	}
 
 	public ExportOrchestrator() {

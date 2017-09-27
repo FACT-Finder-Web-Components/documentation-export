@@ -7,11 +7,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 
-public abstract class FactFinderExportWriter {
+public class FactFinderExportWriter {
 
 	private Writer out;
 
-	FactFinderExportWriter(String outputDir) throws IOException {
+	public FactFinderExportWriter(String outputDir) throws IOException {
 		out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputDir), StandardCharsets.UTF_8));
 	}
 

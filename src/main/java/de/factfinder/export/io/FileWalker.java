@@ -11,16 +11,16 @@ import java.util.stream.Collectors;
 /**
  * Provides functionality to traverse directories and find markdown files easily
  */
-public final class FileWalker {
+final class FileWalker {
 
 	private FileWalker() {
 		//util
 	}
 
-	public static List<File> readMarkdownFilesRecursively(String baseDir) {
+	private static List<File> readMarkdownFilesRecursively(final File baseDir) {
 		List<File> markdownFiles = null;
 		try {
-			markdownFiles = Files.walk(Paths.get(baseDir))
+			markdownFiles = Files.walk(Paths.get(baseDir.getAbsolutePath()))
 								 .filter(Files::isRegularFile)
 								 .map(Path::toFile)
 								 .filter(File::canRead)
@@ -32,11 +32,11 @@ public final class FileWalker {
 		return markdownFiles;
 	}
 
-	public static List<File> readOnlyApiFiles(String baseDir) {
+	static List<File> readOnlyApiFiles(final File baseDir) {
 		return readMarkdownFilesRecursively(baseDir).stream().filter(f -> f.getName().contains("api")).collect(Collectors.toList());
 	}
 
-	public static List<File> readOnlyDocumentationFiles(String baseDir) {
+	static List<File> readOnlyDocumentationFiles(final File baseDir) {
 		return readMarkdownFilesRecursively(baseDir).stream().filter(f -> !f.getName().contains("api")).collect(Collectors.toList());
 	}
 }
