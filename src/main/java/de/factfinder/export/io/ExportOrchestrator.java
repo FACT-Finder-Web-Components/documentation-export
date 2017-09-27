@@ -24,13 +24,13 @@ public final class ExportOrchestrator {
 		List<File> apiFiles = FileWalker.readOnlyApiFiles(inputDir);
 		List<File> docuFiles = FileWalker.readOnlyDocumentationFiles(inputDir);
 
-		StringBuilder documentationCsvContent = new StringBuilder("id;title;code;description;headings;deeplink");
+		StringBuilder documentationCsvContent = new StringBuilder("id;title;code;description;headings;deeplink\n");
 		List<String> parsedDocuFiles = docuFiles.stream().map(file -> MarkdownParser.parseDocumentation(file, baseUrl)).collect(Collectors.toList());
 		for (int i = 0; i < parsedDocuFiles.size(); i++) {
 			documentationCsvContent.append(String.format("\"%d\";", i).concat(parsedDocuFiles.get(i)));
 		}
 
-		StringBuilder apiCsvContent = new StringBuilder("id;title;property;mixins;methods;events;deeplink");
+		StringBuilder apiCsvContent = new StringBuilder("id;title;property;mixins;methods;events;deeplink\n");
 		List<String> parsedApiFiles = apiFiles.stream().map(file -> MarkdownParser.parseDocumentation(file, baseUrl)).collect(Collectors.toList());
 		for (int i = 0; i < parsedApiFiles.size(); i++) {
 			apiCsvContent.append(String.format("\"%d\";", i).concat(parsedApiFiles.get(i)));
