@@ -3,6 +3,7 @@ package de.factfinder.export.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import de.factfinder.export.io.csv.FactFinderExportWriter;
 import de.factfinder.export.io.markdown.MarkdownParser;
@@ -24,10 +25,16 @@ public final class ExportOrchestrator {
 		List<File> docuFiles = FileWalker.readOnlyDocumentationFiles(inputDir);
 
 		StringBuilder documentationCsvContent = new StringBuilder("id;title;code;description;headings;deeplink");
-		docuFiles.stream().map(file -> MarkdownParser.parseDocumentation(file, baseUrl)).forEach(documentationCsvContent::append);
+		List<String> parsedDocuFiles = docuFiles.stream().map(file -> MarkdownParser.parseDocumentation(file, baseUrl)).collect(Collectors.toList());
+		for (int i = 0; i < parsedDocuFiles.size(); i++) {
+			documentationCsvContent.append(String.format("\"%d\";", i).concat(parsedDocuFiles.get(i)));
+		}
 
 		StringBuilder apiCsvContent = new StringBuilder("id;title;property;mixins;methods;events;deeplink");
-		apiFiles.stream().map(file -> MarkdownParser.parseDocumentation(file, baseUrl)).forEach(apiCsvContent::append);
+		List<String> parsedApiFiles = apiFiles.stream().map(file -> MarkdownParser.parseDocumentation(file, baseUrl)).collect(Collectors.toList());
+		for (int i = 0; i < parsedApiFiles.size(); i++) {
+			apiCsvContent.append(String.format("\"%d\";", i).concat(parsedApiFiles.get(i)));
+		}
 
 		FactFinderExportWriter csvWriter = new FactFinderExportWriter(outputBaseDir + documentationFilename);
 		csvWriter.write(documentationCsvContent.toString()).closeFile();
