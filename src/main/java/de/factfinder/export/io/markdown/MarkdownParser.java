@@ -138,11 +138,14 @@ public class MarkdownParser {
 	}
 
 	public static String parseApi(final File markdownFile, final String baseUrl) {
-		String subHeadingBlocks = readOnlySubHeadingBlocks(markdownFile);
-		Map<String, String> tableContent = mapTableContent(subHeadingBlocks);
-		String headings = readApiHeadings(markdownFile);
+		Map<String, String> tableContent = mapTableContent(readOnlySubHeadingBlocks(markdownFile));
 
-		return null;
+//		String headings = readApiHeadings(markdownFile);
+		String multiAttributeField = generateMultiAttributeField(tableContent);
+		String title = markdownFile.getName().replace(".md", "");
+
+		return "\"" + title + "\";\"" + tableContent.get("properties") + "\";\"" + tableContent.get("mixins") + "\";\"" + tableContent.get("methods")
+							+ "\";\"" + tableContent.get("events") + "\";\"" + multiAttributeField + "\";\"" + baseUrl + title + "\"";
 	}
 
 }
