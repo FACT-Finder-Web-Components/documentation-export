@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class MarkdownParser {
 
@@ -114,18 +112,24 @@ public class MarkdownParser {
 			String heading = scanner.nextLine().trim().toLowerCase();
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
-				if (line.contains("|")) {
-					String name = Arrays.stream(line.split("\\|")).findFirst().orElse("");
-					tableContent.append(name.trim()).append(" ");
-				}
+				String name = line.substring(line.indexOf("**") + 2, line.indexOf("**", line.indexOf("**") + 2));
+				tableContent.append(name.trim()).append(" ");
 			}
 			scanner.close();
 			if (!blockMap.isEmpty() && blockMap.containsKey(heading)) {
-				tableContent.append(blockMap.get("heading"));
+				tableContent.append(blockMap.get(heading));
 			}
 			blockMap.put(heading, tableContent.toString());
 		}
 		return blockMap;
+	}
+
+	static String generateMultiAttributeField(Map<String, String> tableContent) {
+		StringBuilder multiAttributeField = new StringBuilder("|");
+		for (String key : tableContent.keySet()) {
+			Arrays.stream(tableContent.get(key).split(" ")).forEach(s -> multiAttributeField.append(key).append("=").append(s).append("|"));
+		}
+		return multiAttributeField.toString();
 	}
 
 	public static String parseDocumentation(final File markdownFile, final String baseUrl) {
@@ -137,7 +141,6 @@ public class MarkdownParser {
 		String subHeadingBlocks = readOnlySubHeadingBlocks(markdownFile);
 		Map<String, String> tableContent = mapTableContent(subHeadingBlocks);
 		String headings = readApiHeadings(markdownFile);
-
 
 		return null;
 	}

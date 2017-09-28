@@ -30,7 +30,7 @@ public final class ExportOrchestrator {
 			documentationCsvContent.append(String.format("\"%d\";", i).concat(parsedDocuFiles.get(i)));
 		}
 
-		StringBuilder apiCsvContent = new StringBuilder("id;title;property;mixins;methods;events;deeplink\n");
+		StringBuilder apiCsvContent = new StringBuilder("id;title;property;mixins;methods;events;attributes;deeplink\n");
 		List<String> parsedApiFiles = apiFiles.stream().map(file -> MarkdownParser.parseDocumentation(file, baseUrl)).collect(Collectors.toList());
 		for (int i = 0; i < parsedApiFiles.size(); i++) {
 			apiCsvContent.append(String.format("\"%d\";", i).concat(parsedApiFiles.get(i)));
