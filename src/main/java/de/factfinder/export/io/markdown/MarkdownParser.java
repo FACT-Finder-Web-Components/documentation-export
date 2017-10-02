@@ -93,7 +93,8 @@ public class MarkdownParser {
 		try (BufferedReader br = new BufferedReader(new FileReader(markdownFile))) {
 			String line;
 			while ((line = br.readLine()) != null) {
-				if (!(line.startsWith("## `") || line.equals("---") || line.isEmpty() || line.startsWith("| Name") || line.startsWith("| ---"))) {
+				if (!(line.startsWith("## `") || line.contains("___") || line.isEmpty() || line.startsWith("| Name") || line.startsWith(
+									"| ---"))) {
 					subHeadingBlocks.append(line).append("\n");
 				}
 			}
@@ -107,19 +108,25 @@ public class MarkdownParser {
 		String[] split = blocks.split("###");
 		Map<String, String> blockMap = new HashMap<>();
 		for (String block : split) {
-			StringBuilder tableContent = new StringBuilder();
-			Scanner scanner = new Scanner(block);
-			String heading = scanner.nextLine().trim().toLowerCase();
-			while (scanner.hasNextLine()) {
-				String line = scanner.nextLine();
-				String name = line.substring(line.indexOf("**") + 2, line.indexOf("**", line.indexOf("**") + 2));
-				tableContent.append(name.trim()).append(" ");
+			if (block != null && !block.isEmpty()) {
+				StringBuilder tableContent = new StringBuilder();
+				Scanner scanner = new Scanner(block);
+				String heading = scanner.nextLine().trim().toLowerCase();
+				while (scanner.hasNextLine()) {
+					String line = scanner.nextLine();
+					int firstIndex = line.indexOf("**");
+					int secondIndex = line.indexOf("**", firstIndex + 2);
+					if (firstIndex >= 0 && secondIndex > firstIndex) {
+						String name = line.substring(firstIndex, secondIndex + 2);
+						tableContent.append(name.trim()).append(" ");
+					}
+				}
+				scanner.close();
+				if (!blockMap.isEmpty() && blockMap.containsKey(heading)) {
+					tableContent.append(blockMap.get(heading));
+				}
+				blockMap.put(heading, tableContent.toString());
 			}
-			scanner.close();
-			if (!blockMap.isEmpty() && blockMap.containsKey(heading)) {
-				tableContent.append(blockMap.get(heading));
-			}
-			blockMap.put(heading, tableContent.toString());
 		}
 		return blockMap;
 	}
@@ -139,13 +146,12 @@ public class MarkdownParser {
 
 	public static String parseApi(final File markdownFile, final String baseUrl) {
 		Map<String, String> tableContent = mapTableContent(readOnlySubHeadingBlocks(markdownFile));
-
-//		String headings = readApiHeadings(markdownFile);
+		//		String headings = readApiHeadings(markdownFile);
 		String multiAttributeField = generateMultiAttributeField(tableContent);
 		String title = markdownFile.getName().replace(".md", "");
 
-		return "\"" + title + "\";\"" + tableContent.get("properties") + "\";\"" + tableContent.get("mixins") + "\";\"" + tableContent.get("methods")
-							+ "\";\"" + tableContent.get("events") + "\";\"" + multiAttributeField + "\";\"" + baseUrl + title + "\"";
+		return "\"" + title + "\";\"" + tableContent.get("properties") + "\";\"" + tableContent.get("mixins") + "\";\"" + tableContent.get("methods") + "\";\""
+							+ tableContent.get("events") + "\";\"" + multiAttributeField + "\";\"" + baseUrl + title + "\"\n";
 	}
 
 }

@@ -11,7 +11,7 @@ import de.factfinder.export.io.markdown.MarkdownParser;
 public final class ExportOrchestrator {
 
 	private static String getLanguage(File directory) {
-		return directory.getParent();
+		return directory.getName();
 	}
 
 	public static void runExport(String inputBaseDir, String outputBaseDir, final String baseUrl) throws IOException {
@@ -31,7 +31,7 @@ public final class ExportOrchestrator {
 		}
 
 		StringBuilder apiCsvContent = new StringBuilder("id;title;property;mixins;methods;events;attributes;deeplink\n");
-		List<String> parsedApiFiles = apiFiles.stream().map(file -> MarkdownParser.parseDocumentation(file, baseUrl)).collect(Collectors.toList());
+		List<String> parsedApiFiles = apiFiles.stream().map(file -> MarkdownParser.parseApi(file, baseUrl)).collect(Collectors.toList());
 		for (int i = 0; i < parsedApiFiles.size(); i++) {
 			apiCsvContent.append(String.format("\"%d\";", i).concat(parsedApiFiles.get(i)));
 		}
