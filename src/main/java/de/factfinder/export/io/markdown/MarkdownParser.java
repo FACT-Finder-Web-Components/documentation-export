@@ -93,8 +93,7 @@ public class MarkdownParser {
 		try (BufferedReader br = new BufferedReader(new FileReader(markdownFile))) {
 			String line;
 			while ((line = br.readLine()) != null) {
-				if (!(line.startsWith("## `") || line.contains("___") || line.isEmpty() || line.startsWith("| Name") || line.startsWith(
-									"| ---"))) {
+				if (!(line.startsWith("## `") || line.contains("___") || line.isEmpty() || line.startsWith("| Name") || line.startsWith("| ---"))) {
 					subHeadingBlocks.append(line).append("\n");
 				}
 			}
@@ -118,7 +117,7 @@ public class MarkdownParser {
 					int secondIndex = line.indexOf("**", firstIndex + 2);
 					if (firstIndex >= 0 && secondIndex > firstIndex) {
 						String name = line.substring(firstIndex, secondIndex + 2);
-						tableContent.append(name.trim()).append(" ");
+						tableContent.append(name.trim().replaceAll("\\*", "")).append(" ");
 					}
 				}
 				scanner.close();
@@ -140,8 +139,9 @@ public class MarkdownParser {
 	}
 
 	public static String parseDocumentation(final File markdownFile, final String baseUrl) {
-		return readAllCodeBlocks(markdownFile) + ";" + readAllHeadings(markdownFile) + ";" + readRegularText(markdownFile) + ";" + baseUrl + "/"
-							+ markdownFile.getName().replace(".md", "\n");
+		String title = markdownFile.getName().replace(".md", "");
+		return "\"" + title + "\";\"" + readAllCodeBlocks(markdownFile) + "\";\"" + readAllHeadings(markdownFile) + "\";\"" + readRegularText(markdownFile)
+							+ "\";\"" + baseUrl + title + "\"\n";
 	}
 
 	public static String parseApi(final File markdownFile, final String baseUrl) {
