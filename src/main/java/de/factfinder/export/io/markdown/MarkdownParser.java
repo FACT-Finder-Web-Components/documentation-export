@@ -140,8 +140,8 @@ public class MarkdownParser {
 
 	public static String parseDocumentation(final File markdownFile, final String baseUrl) {
 		String title = markdownFile.getName().replace(".md", "");
-		return "\"" + title + "\";\"" + readAllCodeBlocks(markdownFile) + "\";\"" + readAllHeadings(markdownFile) + "\";\"" + readRegularText(markdownFile)
-							+ "\";\"" + baseUrl + title + "\"\n";
+		return ("\"" + title + "\";\"" + readAllCodeBlocks(markdownFile) + "\";\"" + readAllHeadings(markdownFile) + "\";\"" + readRegularText(markdownFile)
+							+ "\";\"" + baseUrl + title + "\"\n").replaceAll("#", "");
 	}
 
 	public static String parseApi(final File markdownFile, final String baseUrl) {
@@ -150,8 +150,8 @@ public class MarkdownParser {
 		String multiAttributeField = generateMultiAttributeField(tableContent);
 		String title = markdownFile.getName().replace(".md", "");
 
-		return "\"" + title + "\";\"" + tableContent.get("properties") + "\";\"" + tableContent.get("mixins") + "\";\"" + tableContent.get("methods") + "\";\""
-							+ tableContent.get("events") + "\";\"" + multiAttributeField + "\";\"" + baseUrl + title + "\"\n";
+		return ("\"" + title + "\";\"" + tableContent.get("properties") + "\";\"" + tableContent.get("mixins") + "\";\"" + tableContent.get("methods") + "\";\""
+							+ tableContent.get("events") + "\";\"" + multiAttributeField + "\";\"" + baseUrl + title + "\"\n").replaceAll("#", "");
 	}
 
 }
