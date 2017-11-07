@@ -140,7 +140,7 @@ public class MarkdownParser {
 
 	public static String parseDocumentation(final File markdownFile, final String baseUrl) {
 		String title = markdownFile.getName().replace(".md", "");
-		return ("\"" + title + "\";\"" + readAllCodeBlocks(markdownFile) + "\";\"" + readAllHeadings(markdownFile) + "\";\"" + readRegularText(markdownFile)
+		return ("\"" + title + "\";\"" + readAllCodeBlocks(markdownFile) + "\";\"" + readRegularText(markdownFile) + "\";\"" + readAllHeadings(markdownFile)
 							+ "\";\"" + baseUrl + title + "\"\n").replaceAll("#", "");
 	}
 
