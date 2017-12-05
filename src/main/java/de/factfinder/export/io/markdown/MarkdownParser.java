@@ -139,19 +139,23 @@ public class MarkdownParser {
 	}
 
 	public static String parseDocumentation(final File markdownFile, final String baseUrl) {
-		String title = markdownFile.getName().replace(".md", "");
-		return ("\"" + title + "\";\"" + readAllCodeBlocks(markdownFile) + "\";\"" + readRegularText(markdownFile) + "\";\"" + readAllHeadings(markdownFile)
-							+ "\";\"" + baseUrl + title + "\"\n").replaceAll("#", "");
+		String title = sanitize(markdownFile.getName().replace(".md", ""));
+		return ("\"" + title + "\";\"" + sanitize(readAllCodeBlocks(markdownFile)) + "\";\"" + sanitize(readRegularText(markdownFile)) + "\";\"" + sanitize(
+							readAllHeadings(markdownFile)) + "\";\"" + baseUrl + title + "\"\n").replaceAll("#", "");
 	}
 
 	public static String parseApi(final File markdownFile, final String baseUrl) {
 		Map<String, String> tableContent = mapTableContent(readOnlySubHeadingBlocks(markdownFile));
 		//		String headings = readApiHeadings(markdownFile);
-		String multiAttributeField = generateMultiAttributeField(tableContent);
-		String title = markdownFile.getName().replace(".api.md", "");
+		String multiAttributeField = sanitize(generateMultiAttributeField(tableContent));
+		String title = sanitize(markdownFile.getName().replace(".api.md", ""));
 
-		return ("\"" + title + "\";\"" + tableContent.get("properties") + "\";\"" + tableContent.get("mixins") + "\";\"" + tableContent.get("methods") + "\";\""
-							+ tableContent.get("events") + "\";\"" + multiAttributeField + "\";\"" + baseUrl + title + "\"\n").replaceAll("#", "");
+		return ("\"" + title + "\";\"" + sanitize(tableContent.get("properties")) + "\";\"" + sanitize(tableContent.get("mixins")) + "\";\"" + sanitize(
+							tableContent.get("methods")) + "\";\"" + sanitize(tableContent.get("events")) + "\";\"" + multiAttributeField + "\";\"" + baseUrl
+							+ title + "\"\n").replaceAll("#", "");
 	}
 
+	private static String sanitize(String string) {
+		return string != null && !string.isEmpty() ? string.replace("\"", "").replace(";", "") : "";
+	}
 }
