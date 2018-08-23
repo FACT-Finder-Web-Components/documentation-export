@@ -14,9 +14,9 @@ public final class ExportOrchestrator {
 		return directory.getName();
 	}
 
-	public static void runExport(String inputBaseDir, String outputBaseDir, final String baseUrl) throws IOException {
+	public static void runExport(String elementsDir, String outputBaseDir, final String baseUrl) throws IOException {
 
-		final File inputDir = new File(inputBaseDir);
+		final File inputDir = new File(elementsDir);
 
 		String documentationFilename = "documentation-".concat(getLanguage(inputDir)).concat(".csv");
 		String apiFilename = "api-".concat(getLanguage(inputDir)).concat(".csv");
@@ -41,8 +41,7 @@ public final class ExportOrchestrator {
 		csvWriter = new FactFinderExportWriter(outputBaseDir + apiFilename);
 		csvWriter.write(apiCsvContent.toString()).closeFile();
 	}
-
-	public ExportOrchestrator() {
-		//util
+	private ExportOrchestrator() {
+		// util
 	}
 }

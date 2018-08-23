@@ -1,9 +1,6 @@
 package de.factfinder.export.io.markdown;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +26,6 @@ public class MarkdownParser {
 					}
 				}
 			}
-			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,7 +41,6 @@ public class MarkdownParser {
 					headings.append(line.trim().concat(" "));
 				}
 			}
-			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -64,7 +59,6 @@ public class MarkdownParser {
 				}
 				if (!line.startsWith("#") && !isInCodeBlock && !(line.length() <= 1)) regularText.append(line.trim().concat(" "));
 			}
-			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

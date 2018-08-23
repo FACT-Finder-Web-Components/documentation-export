@@ -21,11 +21,12 @@ final class FileWalker {
 		List<File> markdownFiles = null;
 		try {
 			markdownFiles = Files.walk(Paths.get(baseDir.getAbsolutePath()))
-								 .filter(Files::isRegularFile)
-								 .map(Path::toFile)
-								 .filter(File::canRead)
-								 .filter(file -> file.getName().endsWith("md"))
-								 .collect(Collectors.toList());
+							 			.filter(Files::isRegularFile)
+							 			.map(Path::toFile)
+							 			.filter(File::canRead)
+							 			.filter(file -> file.getName().endsWith("md"))
+										.filter(file -> !file.getParent().contains("documentation"))
+							 			.collect(Collectors.toList());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
