@@ -8,6 +8,10 @@ import java.util.Scanner;
 
 public class MarkdownParser {
 
+	private final static String RELATIVE_PATH = "/api/";
+	private final static String DOCS_TAB = "#tab=docs";
+	private final static String API_TAB = "#tab=api";
+
 	private MarkdownParser() {
 		//Util
 	}
@@ -57,28 +61,13 @@ public class MarkdownParser {
 					isInCodeBlock = !isInCodeBlock;
 					continue;
 				}
-				if (!line.startsWith("#") && !isInCodeBlock && !(line.length() <= 1)) regularText.append(line.trim().concat(" "));
+				if (!line.startsWith("#") && !isInCodeBlock && !(line.length() <= 1))
+					regularText.append(line.trim().concat(" "));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return regularText.toString();
-	}
-
-	private static String readApiHeadings(final File markdownFile) {
-		StringBuilder apiHeadings = new StringBuilder();
-		try (BufferedReader br = new BufferedReader(new FileReader(markdownFile))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				if (line.startsWith("## `")) {
-					apiHeadings.append(line.replace("## ", "").replace("`", "")).append(" ");
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return apiHeadings.toString();
 	}
 
 	private static String readOnlySubHeadingBlocks(final File markdownFile) {
@@ -132,21 +121,27 @@ public class MarkdownParser {
 		return multiAttributeField.toString();
 	}
 
-	public static String parseDocumentation(final File markdownFile, final String baseUrl) {
+	public static String parseDocumentation(final File markdownFile, String absoluteUrl) {
 		String title = sanitize(markdownFile.getName().replace(".md", ""));
-		return ("\"" + title + "\";\"" + sanitize(readAllCodeBlocks(markdownFile)) + "\";\"" + sanitize(readRegularText(markdownFile)) + "\";\"" + sanitize(
-							readAllHeadings(markdownFile)) + "\";\"" + baseUrl + title + "\"\n").replaceAll("#", "");
+		return ("\"" + title + "\";\""
+				+ sanitize(readAllCodeBlocks(markdownFile)) + "\";\""
+				+ sanitize(readRegularText(markdownFile)) + "\";\""
+				+ sanitize(readAllHeadings(markdownFile)) + "\";\""
+				+ absoluteUrl + RELATIVE_PATH + title).replaceAll("#", "").concat(DOCS_TAB + "\"\n");
 	}
 
-	public static String parseApi(final File markdownFile, final String baseUrl) {
+	public static String parseApi(final File markdownFile, String absoluteUrl) {
 		Map<String, String> tableContent = mapTableContent(readOnlySubHeadingBlocks(markdownFile));
-		//		String headings = readApiHeadings(markdownFile);
 		String multiAttributeField = sanitize(generateMultiAttributeField(tableContent));
 		String title = sanitize(markdownFile.getName().replace(".api.md", ""));
 
-		return ("\"" + title + "\";\"" + sanitize(tableContent.get("properties")) + "\";\"" + sanitize(tableContent.get("mixins")) + "\";\"" + sanitize(
-							tableContent.get("methods")) + "\";\"" + sanitize(tableContent.get("events")) + "\";\"" + multiAttributeField + "\";\"" + baseUrl
-							+ title + "\"\n").replaceAll("#", "");
+		return ("\"" + title + "\";\""
+				+ sanitize(tableContent.get("properties")) + "\";\""
+				+ sanitize(tableContent.get("mixins")) + "\";\""
+				+ sanitize(tableContent.get("methods")) + "\";\""
+				+ sanitize(tableContent.get("events")) + "\";\""
+				+ multiAttributeField + "\";\""
+				+ absoluteUrl + RELATIVE_PATH + title).replaceAll("#", "").concat(API_TAB + "\"\n");
 	}
 
 	private static String sanitize(String string) {
