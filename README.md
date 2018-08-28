@@ -12,5 +12,15 @@ In the project root directory run:
 
 Run the executable jar like this:
 
-	java -jar documentation-export.jar -a path/to/api-files/ -d path/to/documentation-files/ [-u http://base-url.com/]
+	java -jar documentation-export.jar -a path/to/api-files/ -d path/to/documentation-files/ 
+	
+### Options
+
+#### -u / --url
+
+Base URL that is prepended to the relative url
+
+#### -o / --output-dir
+
+Export files are placed in this directory
 	
