@@ -3,7 +3,9 @@ package de.factfinder.export.io;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.IntConsumer;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import de.factfinder.export.io.csv.FactFinderExportWriter;
 import de.factfinder.export.io.markdown.MarkdownParser;
@@ -18,15 +20,16 @@ public final class ExportOrchestrator {
 
 	private static String indexLines(String header, List<String> csvLines) {
 		StringBuilder sb = new StringBuilder(header);
-		csvLines.forEach(line -> sb.append(String.format("\"%d\";", csvLines.indexOf(line))).append(line));
+		IntConsumer writeLine = index -> sb.append(String.format("\"%d\";", index)).append(csvLines.get(index));
+		IntStream.range(0, csvLines.size()).forEach(writeLine);
 		return sb.toString();
 	}
 
 	public static void runExport(CommandLine cmd) throws IOException {
-		String absoluteUrl = cmd.hasOption("u") ? cmd.getOptionValue("u") : "";
+		String absoluteUrl = cmd.getOptionValue("u", "");
 		if (cmd.hasOption("a")) {
 			String apiDirectory = cmd.getOptionValue("a");
-			String outputDir = cmd.hasOption("o") ? cmd.getOptionValue("o") : apiDirectory;
+			String outputDir = cmd.getOptionValue("o", apiDirectory);
 
 			List<File> files = FileWalker.readMarkdownFiles(new File(apiDirectory));
 			List<String> apiLines = files.stream().map(file -> MarkdownParser.parseApi(file, absoluteUrl)).collect(Collectors.toList());
@@ -37,7 +40,7 @@ public final class ExportOrchestrator {
 		}
 		if (cmd.hasOption("d")) {
 			String docDirectory = cmd.getOptionValue("d");
-			String outputDir = cmd.hasOption("o") ? cmd.getOptionValue("o") : docDirectory;
+			String outputDir = cmd.getOptionValue("o", docDirectory);
 
 			List<File> files = FileWalker.readMarkdownFiles(new File(docDirectory));
 			List<String> docLines = files.stream().map(file -> MarkdownParser.parseDocumentation(file, absoluteUrl)).collect(Collectors.toList());

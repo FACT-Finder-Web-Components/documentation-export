@@ -29,7 +29,7 @@ public class MarkdownToText {
 		TextCollectingVisitor textCollectingVisitor = new TextCollectingVisitor();
 		BasedSequence[] basedSequences = textCollectingVisitor.collectAndGetSegments(document);
 
-		return Arrays.stream(basedSequences).filter(seq -> !seq.isEmpty() && !seq.isBlank()).map(BasedSequence::trim).collect(Collectors.joining());
+		return Arrays.stream(basedSequences).filter(seq -> !seq.isBlank()).map(BasedSequence::trim).collect(Collectors.joining());
 	}
 
 }

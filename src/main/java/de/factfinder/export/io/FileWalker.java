@@ -1,5 +1,7 @@
 package de.factfinder.export.io;
 
+import com.sun.istack.internal.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -43,15 +46,11 @@ final class FileWalker {
 	}
 
 	static List<File> readMarkdownFiles(final File directory) {
-		File[] files;
-		if (directory != null && directory.exists() && directory.isDirectory() && (files = directory.listFiles()) != null) {
-			return Arrays.stream(files)
-					.filter(File::canRead)
-					.filter(File::isFile)
-					.filter(file -> file.getName().endsWith(".md"))
-					.collect(Collectors.toList());
-		} else {
-			return null;
-		}
+		return Arrays.stream(Objects.requireNonNull(directory.listFiles()))
+				.filter(File::canRead)
+				.filter(File::isFile)
+				.filter(file -> file.getName().endsWith(".md"))
+				.collect(Collectors.toList());
+
 	}
 }

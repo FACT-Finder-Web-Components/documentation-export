@@ -61,8 +61,9 @@ public class MarkdownParser {
 					isInCodeBlock = !isInCodeBlock;
 					continue;
 				}
-				if (!line.startsWith("#") && !isInCodeBlock && !(line.length() <= 1))
+				if (!line.startsWith("#") && !isInCodeBlock && line.length() > 1) {
 					regularText.append(line.trim().concat(" "));
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -127,7 +128,8 @@ public class MarkdownParser {
 				+ sanitize(readAllCodeBlocks(markdownFile)) + "\";\""
 				+ sanitize(readRegularText(markdownFile)) + "\";\""
 				+ sanitize(readAllHeadings(markdownFile)) + "\";\""
-				+ absoluteUrl + RELATIVE_PATH + title).replaceAll("#", "").concat(DOCS_TAB + "\"\n");
+				+ absoluteUrl + RELATIVE_PATH + title).replaceAll("#", "")
+				+ DOCS_TAB + "\"\n";
 	}
 
 	public static String parseApi(final File markdownFile, String absoluteUrl) {
@@ -141,7 +143,8 @@ public class MarkdownParser {
 				+ sanitize(tableContent.get("methods")) + "\";\""
 				+ sanitize(tableContent.get("events")) + "\";\""
 				+ multiAttributeField + "\";\""
-				+ absoluteUrl + RELATIVE_PATH + title).replaceAll("#", "").concat(API_TAB + "\"\n");
+				+ absoluteUrl + RELATIVE_PATH + title).replaceAll("#", "")
+				+ API_TAB + "\"\n";
 	}
 
 	private static String sanitize(String string) {
