@@ -24,7 +24,7 @@ public class FactFinderExportWriter {
 		return this;
 	}
 
-	public void closeFile() {
+	public void close() {
 		try {
 			this.out.close();
 		} catch (IOException e) {

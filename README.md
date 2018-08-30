@@ -2,33 +2,25 @@
 
 Generates .csv files search
 
-## Dev
-
-### Setup
-
-##### Prerequisites
-
-* Install [Maven](https://maven.apache.org/) 
-* Install JDK 8 
-* Directory containing markdown files `$MARKDOWN`
-
-##### Run exporter
-
-In the project root directory run:
-
-    mvn exec:java -Dexec.args=$MARKDOWN
-
 ### Build / Package
 
 In the project root directory run: 
 
 	mvn clean compile package
-	
-## Use
 
 ### Running exporter
 
 Run the executable jar like this:
 
-	java -jar documentation-export.jar $MARKDOWN
+	java -jar documentation-export.jar -a path/to/api-files/ -d path/to/documentation-files/ 
+	
+### Options
+
+#### -u / --url
+
+Base URL that is prepended to the relative url
+
+#### -o / --output-dir
+
+Export files are placed in this directory
 	

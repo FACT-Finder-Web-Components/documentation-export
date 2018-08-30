@@ -1,44 +1,20 @@
 package de.factfinder.export;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import de.factfinder.export.io.ExportOrchestrator;
+import de.factfinder.export.io.cli.CliOptions;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
+import java.io.IOException;
 
 public class ExportMain {
 
-	public static void main(String[] args) throws IOException {
-		if (args.length == 3) {
-			ExportOrchestrator.runExport(args[0], args[1], args[2]);
-		} else {
-			String inputBaseDir;
-			String outputBaseDir;
-			String baseUrl;
-			try {
-				BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-				System.out.println("Please enter input directory containing markdown files: ");
-				inputBaseDir = input.readLine();
-				if ("q".equals(inputBaseDir)) {
-					System.out.println("Exit!");
-					System.exit(0);
-				}
-				System.out.println("Please enter output directory for csv files: ");
-				outputBaseDir = input.readLine();
-				if ("q".equals(outputBaseDir)) {
-					System.out.println("Exit!");
-					System.exit(0);
-				}
-				System.out.println("Please enter base url: ");
-				baseUrl = input.readLine();
-				if ("q".equals(outputBaseDir)) {
-					System.out.println("Exit!");
-					System.exit(0);
-				}
-				ExportOrchestrator.runExport(inputBaseDir, outputBaseDir, baseUrl);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	public static void main(String[] args) throws ParseException, IOException {
+		Options options = new CliOptions();
+		DefaultParser parser = new DefaultParser();
+		CommandLine cmd = parser.parse(options, args);
+		ExportOrchestrator.runExport(cmd);
 	}
 }
