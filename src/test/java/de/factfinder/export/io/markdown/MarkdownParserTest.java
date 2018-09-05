@@ -74,7 +74,7 @@ public class MarkdownParserTest {
 	public void test_parseApiFile() {
 		assertNotNull(apiTestFile);
 		assertTrue(apiTestFile.exists());
-		String api = MarkdownParser.parseApi(apiTestFile);
+		String api = MarkdownParser.parseApi(apiTestFile, "");
 		System.out.println(api);
 		// TODO test
 	}
