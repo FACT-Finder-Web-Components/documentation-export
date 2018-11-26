@@ -1,7 +1,5 @@
 package de.factfinder.export.io;
 
-import com.sun.istack.internal.Nullable;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
