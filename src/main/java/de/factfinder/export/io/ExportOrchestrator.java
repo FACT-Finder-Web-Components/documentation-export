@@ -27,6 +27,7 @@ public final class ExportOrchestrator {
 
 	public static void runExport(CommandLine cmd) throws IOException {
 		String absoluteUrl = cmd.getOptionValue("u", "");
+		String version = cmd.getOptionValue("v", "");
 		if (cmd.hasOption("a")) {
 			String apiDirectory = cmd.getOptionValue("a");
 			String outputDir = cmd.getOptionValue("o", apiDirectory);
@@ -35,7 +36,7 @@ public final class ExportOrchestrator {
 			List<String> apiLines = files.stream().map(file -> MarkdownParser.parseApi(file, absoluteUrl)).collect(Collectors.toList());
 			String csvContent = indexLines(API_CSV_HEADER, apiLines);
 
-			FactFinderExportWriter csvWriter = new FactFinderExportWriter(outputDir + DEFAULT_API_EXPORT_FILENAME);
+			FactFinderExportWriter csvWriter = new FactFinderExportWriter(outputDir + DEFAULT_API_EXPORT_FILENAME.concat(version));
 			csvWriter.write(csvContent).close();
 		}
 		if (cmd.hasOption("d")) {
@@ -46,7 +47,7 @@ public final class ExportOrchestrator {
 			List<String> docLines = files.stream().map(file -> MarkdownParser.parseDocumentation(file, absoluteUrl)).collect(Collectors.toList());
 			String csvContent = indexLines(DOCS_CSV_HEADER, docLines);
 
-			FactFinderExportWriter csvWriter = new FactFinderExportWriter(outputDir + DEFAULT_DOC_EXPORT_FILENAME);
+			FactFinderExportWriter csvWriter = new FactFinderExportWriter(outputDir + DEFAULT_DOC_EXPORT_FILENAME.concat(version));
 			csvWriter.write(csvContent).close();
 		}
 	}
