@@ -15,8 +15,8 @@ public final class ExportOrchestrator {
 
 	private final static String API_CSV_HEADER = "id;title;property;mixins;methods;events;attributes;deeplink\n";
 	private final static String DOCS_CSV_HEADER = "id;title;code;description;headings;deeplink\n";
-	private final static String DEFAULT_API_EXPORT_FILENAME = "/api-export.csv";
-	private final static String DEFAULT_DOC_EXPORT_FILENAME = "/doc-export.csv";
+	private final static String DEFAULT_API_EXPORT_FILENAME = "/api-export%s.csv";
+	private final static String DEFAULT_DOC_EXPORT_FILENAME = "/doc-export%s.csv";
 
 	private static String indexLines(String header, List<String> csvLines) {
 		StringBuilder sb = new StringBuilder(header);
@@ -36,7 +36,7 @@ public final class ExportOrchestrator {
 			List<String> apiLines = files.stream().map(file -> MarkdownParser.parseApi(file, absoluteUrl)).collect(Collectors.toList());
 			String csvContent = indexLines(API_CSV_HEADER, apiLines);
 
-			FactFinderExportWriter csvWriter = new FactFinderExportWriter(outputDir + DEFAULT_API_EXPORT_FILENAME.concat(version));
+			FactFinderExportWriter csvWriter = new FactFinderExportWriter(outputDir + String.format(DEFAULT_API_EXPORT_FILENAME, version));
 			csvWriter.write(csvContent).close();
 		}
 		if (cmd.hasOption("d")) {
@@ -47,7 +47,7 @@ public final class ExportOrchestrator {
 			List<String> docLines = files.stream().map(file -> MarkdownParser.parseDocumentation(file, absoluteUrl)).collect(Collectors.toList());
 			String csvContent = indexLines(DOCS_CSV_HEADER, docLines);
 
-			FactFinderExportWriter csvWriter = new FactFinderExportWriter(outputDir + DEFAULT_DOC_EXPORT_FILENAME.concat(version));
+			FactFinderExportWriter csvWriter = new FactFinderExportWriter(outputDir + String.format(DEFAULT_DOC_EXPORT_FILENAME, version));
 			csvWriter.write(csvContent).close();
 		}
 	}
