@@ -40,9 +40,19 @@ public class CliOptions extends Options {
 				.numberOfArgs(1)
 				.build();
 
+		Option version = Option.builder("v")
+				.required(false)
+				.desc("Mandatory. Version string that will be appended to the export's filename.")
+				.longOpt("version")
+				.hasArg(true)
+				.numberOfArgs(1)
+				.required(true)
+				.build();
+
 		addOption(apiDirectory);
 		addOption(docDirectory);
 		addOption(absoluteURL);
 		addOption(outputDir);
+		addOption(version);
 	}
 }
